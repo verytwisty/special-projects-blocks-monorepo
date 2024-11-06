@@ -1,0 +1,28 @@
+.wp-block-wpcomsp-modal-container {
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.8);
+	bottom: 0;
+	display: none;
+	left: 0%;
+	justify-content: center;
+	max-width: 100%;
+	position: fixed;
+	top: 0%;
+	transition: opacity 0.2s ease-in-out;
+	width: 100%;
+	z-index: 1000;
+
+	&.is-open {
+		display: flex;
+	}
+
+	.close-modal {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+	}
+
+	.wp-block-wpcomsp-modal-container--inner {
+		width: 100%;
+	}
+}
