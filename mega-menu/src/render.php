@@ -20,12 +20,12 @@ if ( ! $mega_menu_blocks_menu_slug ) {
 $mega_menu_blocks_unique_id     = wp_unique_id( 'mega-menu-' );
 $mega_menu_blocks_unique_button = wp_unique_id( 'mega-menu-btn-' );
 
-$mega_menu_extra_block_wrapper_attributes = apply_filters( 'wpcomsp_mega_menu_extra_block_wrapper_attributes', array() );
-$mega_menu_button_classes                 = apply_filters( 'wpcomsp_mega_menu_button_classes', array() );
-$mega_menu_container_classes              = apply_filters( 'wpcomsp_mega_menu_container_classes', array( 'wp-block-wpcomsp-mega-menu__menu-container' ) );
+$mega_menu_extra_block_wrapper_attributes = apply_filters( 'a8csp_mega_menu_extra_block_wrapper_attributes', array() );
+$mega_menu_button_classes                 = apply_filters( 'a8csp_mega_menu_button_classes', array() );
+$mega_menu_container_classes              = apply_filters( 'a8csp_mega_menu_container_classes', array( 'wp-block-a8csp-mega-menu__menu-container' ) );
 
 wp_interactivity_state(
-	'wpcomsp/mega-menu',
+	'a8csp/mega-menu',
 	array(
 		'selected' => null,
 	)
@@ -34,7 +34,7 @@ wp_interactivity_state(
 ?>
 <li
 	<?php echo wp_kses_data( get_block_wrapper_attributes( $mega_menu_extra_block_wrapper_attributes ) ); ?>
-	data-wp-interactive="wpcomsp/mega-menu"
+	data-wp-interactive="a8csp/mega-menu"
 	<?php
 		echo wp_kses_data(
 			wp_interactivity_data_wp_context(

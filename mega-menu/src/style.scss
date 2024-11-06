@@ -5,7 +5,7 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-wpcomsp-mega-menu {
+.wp-block-a8csp-mega-menu {
 	list-style: none;
 	text-align: right;
 
@@ -23,7 +23,7 @@
 		}
 	}
 
-	.wp-block-wpcomsp-mega-menu__menu-container {
+	.wp-block-a8csp-mega-menu__menu-container {
 		height: auto;
 		display: none;
 		max-width: calc(
@@ -45,7 +45,7 @@
 		}
 	}
 
-	button[aria-expanded='true'] + .wp-block-wpcomsp-mega-menu__menu-container {
+	button[aria-expanded='true'] + .wp-block-a8csp-mega-menu__menu-container {
 		display: block;
 		opacity: 1;
 		visibility: visible;

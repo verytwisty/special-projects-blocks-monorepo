@@ -3,7 +3,7 @@
  */
 import { store, getContext } from '@wordpress/interactivity';
 
-const { state, actions, helpers } = store( 'wpcomsp/mega-menu', {
+const { state, actions, helpers } = store( 'a8csp/mega-menu', {
 	state: {
 		get isOpen() {
 			const { id } = getContext();
