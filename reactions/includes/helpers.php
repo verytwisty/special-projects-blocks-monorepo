@@ -15,7 +15,13 @@ function wpcomsp_reactions_get_reactions_data(): array {
 		)
 	);
 
-	foreach ( $results as $result ) {
+	foreach ( $results as $key => $result ) {
+		// Only show reactions for existing posts.
+		if ( ! get_post_status( $result->post_id ) ) {
+			unset( $results[ $key ] );
+			continue;
+		}
+
 		// Format the date.
 		$result->created_at_formatted = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $result->created_at ) );
 
