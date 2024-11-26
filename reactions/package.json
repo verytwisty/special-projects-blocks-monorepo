@@ -17,6 +17,6 @@
 		"@wordpress/scripts": "^30.3.0"
 	},
 	"dependencies": {
-		"@wordpress/dataviews": "^4.6.0"
+		"@wordpress/dataviews": "^4.8.0"
 	}
 }
