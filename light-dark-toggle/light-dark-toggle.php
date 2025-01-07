@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Light Dark Toggle
- * Description:       Example block scaffolded with Create Block tool.
+ * Description:       Allows a site to have a light and dark mode toggle.
  * Version:           0.1.0
  * Requires at least: 6.7
  * Requires PHP:      7.4
