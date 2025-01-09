@@ -56,25 +56,28 @@ export default function Edit( { attributes, setAttributes } ) {
 		<div>
 			{ /* Sidebar Settings */ }
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings', 'reactions' ) }>
+				<PanelBody title={ __( 'Settings', 'light-dark-toggle' ) }>
 					<SelectControl
-						label={ __( 'Default Mode', 'reactions' ) }
+						label={ __( 'Default Mode', 'light-dark-toggle' ) }
 						value={ defaultMode }
 						onChange={ ( value ) =>
 							setAttributes( { defaultMode: value } )
 						}
 						options={ [
 							{
-								label: __( 'Light', 'reactions' ),
+								label: __( 'Light', 'light-dark-toggle' ),
 								value: 'light',
 							},
-							{ label: __( 'Dark', 'reactions' ), value: 'dark' },
+							{
+								label: __( 'Dark', 'light-dark-toggle' ),
+								value: 'dark',
+							},
 						] }
 					/>
 					<p style={ { marginTop: '10px', color: '#555' } }>
 						{ __(
 							'Tip: Which ever mode is set, the opposite will have its class added to the body',
-							'reactions'
+							'light-dark-toggle'
 						) }
 					</p>
 				</PanelBody>
