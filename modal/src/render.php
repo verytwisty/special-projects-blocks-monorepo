@@ -10,19 +10,19 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
-$wpcomsp_blocks_modal_label = isset( $attributes['label'] ) ? esc_html( $attributes['label'] ) : null;
-$wpcomsp_blocks_modal_slug  = isset( $attributes['modalSlug'] ) ? esc_attr( $attributes['modalSlug'] ) : null;
+$a8csp_blocks_modal_label = isset( $attributes['label'] ) ? esc_html( $attributes['label'] ) : null;
+$a8csp_blocks_modal_slug  = isset( $attributes['modalSlug'] ) ? esc_attr( $attributes['modalSlug'] ) : null;
 
-if ( ! $wpcomsp_blocks_modal_label || ! $wpcomsp_blocks_modal_slug ) {
+if ( ! $a8csp_blocks_modal_label || ! $a8csp_blocks_modal_slug ) {
 	return null;
 }
 
-$wpcomsp_blocks_modal_button_classes = apply_filters( 'wpcomsp_blocks_modal_button_classes', array() );
-$wpcomsp_blocks_modal_button_id      = wp_unique_id( '-button-' );
-$wpcomsp_blocks_modal_button         = $wpcomsp_blocks_modal_slug . $wpcomsp_blocks_modal_button_id;
+$a8csp_blocks_modal_button_classes = apply_filters( 'a8csp_blocks_modal_button_classes', array() );
+$a8csp_blocks_modal_button_id      = wp_unique_id( '-button-' );
+$a8csp_blocks_modal_button         = $a8csp_blocks_modal_slug . $a8csp_blocks_modal_button_id;
 
 wp_interactivity_state(
-	'wpcomsp/modal',
+	'a8csp/modal',
 	array(
 		'selected' => null,
 	)
@@ -30,14 +30,14 @@ wp_interactivity_state(
 
 ?>
 <button
-	<?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => $wpcomsp_blocks_modal_button_classes ) ) ); ?>
-	data-wp-interactive="wpcomsp/modal"
+	<?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => $a8csp_blocks_modal_button_classes ) ) ); ?>
+	data-wp-interactive="a8csp/modal"
 	<?php
 	echo wp_kses_data(
 		wp_interactivity_data_wp_context(
 			array(
-				'id'     => $wpcomsp_blocks_modal_slug,
-				'button' => $wpcomsp_blocks_modal_button,
+				'id'     => $a8csp_blocks_modal_slug,
+				'button' => $a8csp_blocks_modal_button,
 			)
 		)
 	);
@@ -46,8 +46,8 @@ wp_interactivity_state(
 	data-wp-bind--aria-expanded="state.isModalOpen"
 	data-wp-on--keydown="actions.handleMenuKeydown"
 	data-wp-on-async-document--click="callbacks.handleModalOutsideClick"
-	id="<?php echo esc_attr( $wpcomsp_blocks_modal_button ); ?>"
+	id="<?php echo esc_attr( $a8csp_blocks_modal_button ); ?>"
 	aria-haspopup="menu"
 >
-	<?php echo esc_html( $wpcomsp_blocks_modal_label ); ?>
+	<?php echo esc_html( $a8csp_blocks_modal_label ); ?>
 </button>

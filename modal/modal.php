@@ -10,12 +10,38 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       modal
  *
- * @package           wpcomsp
+ * @package           a8csp
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
+
+// If no other WPCOMSP Block Plugin added the self update class, add it.
+if ( ! class_exists( 'WPCOMSP_Blocks_Self_Update' ) ) {
+	require __DIR__ . '/classes/class-wpcomsp-blocks-self-update.php';
+
+	$wpcomsp_blocks_self_update = WPCOMSP_Blocks_Self_Update::get_instance();
+	$wpcomsp_blocks_self_update->hooks();
+}
+
+/**
+ * Setup auto-updates for this plugin from our monorepo.
+ * Done in an anonymous function for simplicity in making this a drop-in snippet.
+ *
+ * @param array $blocks Array of plugin files.
+ *
+ * @return array
+ */
+add_filter(
+	'wpcomsp_installed_blocks',
+	function ( $blocks ) {
+		// Add the plugin slug here to enable autoupdates.
+		$blocks[] = 'modal';
+
+		return $blocks;
+	}
+);
 
 /**
  * Registers the block using the metadata loaded from the `block.json` file.
@@ -26,10 +52,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return void
  */
-function wpcomsp_modal_block_init() {
+function a8csp_modal_block_init() {
 	register_block_type_from_metadata( __DIR__ . '/build' );
 }
-add_action( 'init', 'wpcomsp_modal_block_init' );
+add_action( 'init', 'a8csp_modal_block_init' );
 
 /**
  * Adds a custom template part area for mega menus to the list of template part areas.
@@ -38,15 +64,15 @@ add_action( 'init', 'wpcomsp_modal_block_init' );
  *
  * @return array Modified array of template part areas.
  */
-function wpcomsp_modal_template_areas( array $areas ) {
+function a8csp_modal_template_areas( array $areas ) {
 	$modal_area = apply_filters(
-		'wpcomsp_modal_area_args',
+		'a8csp_modal_area_args',
 		array(
 			'area'        => 'modal',
 			'area_tag'    => 'div',
-			'description' => __( 'Modal content templates', 'wpcomsp' ),
+			'description' => __( 'Modal content templates', 'a8csp' ),
 			'icon'        => '',
-			'label'       => __( 'Modal', 'wpcomsp' ),
+			'label'       => __( 'Modal', 'a8csp' ),
 		)
 	);
 
@@ -55,7 +81,7 @@ function wpcomsp_modal_template_areas( array $areas ) {
 	return $areas;
 }
 
-add_filter( 'default_wp_template_part_areas', 'wpcomsp_modal_template_areas' );
+add_filter( 'default_wp_template_part_areas', 'a8csp_modal_template_areas' );
 
 /**
  * Retrieves the modal templates part areas.
@@ -64,7 +90,7 @@ add_filter( 'default_wp_template_part_areas', 'wpcomsp_modal_template_areas' );
  *
  * @return array
  */
-function wpcomsp_modal_get_modal_templates() {
+function a8csp_modal_get_modal_templates() {
 	$get_all_templates = get_block_templates( array( 'area' => 'modal' ), 'wp_template_part' );
 
 	$modal_templates = array_map(
@@ -79,7 +105,7 @@ function wpcomsp_modal_get_modal_templates() {
 		$get_all_templates
 	);
 
-	$modal_templates = apply_filters( 'wpcomsp_modal_modal_template_args', $modal_templates, $get_all_templates );
+	$modal_templates = apply_filters( 'a8csp_modal_modal_template_args', $modal_templates, $get_all_templates );
 
 	return $modal_templates;
 }
@@ -92,8 +118,8 @@ function wpcomsp_modal_get_modal_templates() {
  *
  * @return void
  */
-function wpcomsp_modal_add_modal_meta() {
-	$modal_templates = wpcomsp_modal_get_modal_templates();
+function a8csp_modal_add_modal_meta() {
+	$modal_templates = a8csp_modal_get_modal_templates();
 
 	add_option( 'modal_meta', array() );
 
@@ -114,7 +140,7 @@ function wpcomsp_modal_add_modal_meta() {
 		);
 	}
 
-	$settings = apply_filters( 'wpcomsp_modal_meta_args', $settings, $modal_templates );
+	$settings = apply_filters( 'a8csp_modal_meta_args', $settings, $modal_templates );
 
 	register_setting(
 		'modal_option_fields',
@@ -130,7 +156,7 @@ function wpcomsp_modal_add_modal_meta() {
 	);
 }
 
-add_action( 'init', 'wpcomsp_modal_add_modal_meta' );
+add_action( 'init', 'a8csp_modal_add_modal_meta' );
 
 /**
  * Add the modal templates to the site.
@@ -144,13 +170,13 @@ add_action( 'init', 'wpcomsp_modal_add_modal_meta' );
  *
  * @return void
  */
-function wpcomsp_modal_insert_modal_templates() {
+function a8csp_modal_insert_modal_templates() {
 
-	if ( ! has_block( 'wpcomsp/modal' ) ) {
+	if ( ! has_block( 'a8csp/modal' ) ) {
 		return;
 	}
 
-	$modal_templates = wpcomsp_modal_get_modal_templates();
+	$modal_templates = a8csp_modal_get_modal_templates();
 
 	ob_start();
 
@@ -162,18 +188,18 @@ function wpcomsp_modal_insert_modal_templates() {
 		$modal_description = isset( $modal_meta[ $slug ] ) && isset( $modal_meta[ $slug ]['modalDescription'] ) ? $modal_meta[ $slug ]['modalDescription'] : false;
 
 		wp_interactivity_state(
-			'wpcomsp/modal',
+			'a8csp/modal',
 			array(
 				'selected' => null,
 			)
 		);
 		?>
 		<div
-			class="wp-block-wpcomsp-modal-container"
+			class="wp-block-a8csp-modal-container"
 			id="<?php echo esc_attr( $template['slug'] ); ?>"
 			role="dialog"
 			aria-modal="true"
-			data-wp-interactive="wpcomsp/modal"
+			data-wp-interactive="a8csp/modal"
 			data-wp-class--is-open="state.isModalOpen"
 			data-wp-on--keydown="actions.handleModalKeydown"
 			data-wp-bind--aria-hidden="!state.isModalOpen"
@@ -192,7 +218,7 @@ function wpcomsp_modal_insert_modal_templates() {
 				);
 				?>
 		>
-		<?php do_action( 'wpcomsp_modal_inner_content', $template ); ?>
+		<?php do_action( 'a8csp_modal_inner_content', $template ); ?>
 		</div>
 
 		<?php
@@ -209,7 +235,7 @@ function wpcomsp_modal_insert_modal_templates() {
 	);
 }
 
-add_action( 'wp_head', 'wpcomsp_modal_insert_modal_templates', 0 );
+add_action( 'wp_head', 'a8csp_modal_insert_modal_templates', 0 );
 
 /**
  * Add the default inner content for the modal.
@@ -218,9 +244,9 @@ add_action( 'wp_head', 'wpcomsp_modal_insert_modal_templates', 0 );
  *
  * @return void
  */
-function wpcomsp_modal_default_inner_content( $template ) {
+function a8csp_modal_default_inner_content( $template ) {
 	?>
-	<div class="wp-block-wpcomsp-modal-container--inner">
+	<div class="wp-block-a8csp-modal-container--inner">
 		
 		<?php echo do_blocks( $template['content'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 	</div>
@@ -239,7 +265,7 @@ function wpcomsp_modal_default_inner_content( $template ) {
 	<?php
 }
 
-add_action( 'wpcomsp_modal_inner_content', 'wpcomsp_modal_default_inner_content' );
+add_action( 'a8csp_modal_inner_content', 'a8csp_modal_default_inner_content' );
 
 /**
  * Add Modal button block to the list of allowed blocks for the Navigation block.
@@ -249,9 +275,9 @@ add_action( 'wpcomsp_modal_inner_content', 'wpcomsp_modal_default_inner_content'
  *
  * @return array
  */
-function wpcomsp_modal_navigation_filter( $args, $block_type ) {
+function a8csp_modal_navigation_filter( $args, $block_type ) {
 	// Filter to disable modal for navigation if needed.
-	$allow_modal_for_navigation = apply_filters( 'wpcomsp_modal_navigation', true );
+	$allow_modal_for_navigation = apply_filters( 'a8csp_modal_navigation', true );
 
 	if ( ! $allow_modal_for_navigation ) {
 		return $args;
@@ -259,7 +285,7 @@ function wpcomsp_modal_navigation_filter( $args, $block_type ) {
 
 	if ( 'core/navigation' === $block_type ) {
 		if ( is_array( $args['allowed_blocks'] ) ) {
-			$updated_args = array_push( $args['allowed_blocks'], 'wpcomsp/modal' );
+			$updated_args = array_push( $args['allowed_blocks'], 'a8csp/modal' );
 
 			$args['allowedBlocks'] = $updated_args;
 		}
@@ -268,4 +294,4 @@ function wpcomsp_modal_navigation_filter( $args, $block_type ) {
 	return $args;
 }
 
-add_filter( 'register_block_type_args', 'wpcomsp_modal_navigation_filter', 10, 2 );
+add_filter( 'register_block_type_args', 'a8csp_modal_navigation_filter', 10, 2 );

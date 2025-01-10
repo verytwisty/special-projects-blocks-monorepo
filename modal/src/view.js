@@ -3,7 +3,7 @@
  */
 import { store, getContext, getElement } from '@wordpress/interactivity';
 
-const { actions, state, helpers } = store( 'wpcomsp/modal', {
+const { actions, state, helpers } = store( 'a8csp/modal', {
 	state: {
 		get isModalOpen() {
 			const { id } = getContext();
@@ -15,11 +15,14 @@ const { actions, state, helpers } = store( 'wpcomsp/modal', {
 		focusOpen() {
 			const { id } = getContext();
 			const modal = helpers.getModal( id );
-			const link = modal.querySelector( 'a' );
+			const focusElements = [ ...modal.querySelectorAll(
+				'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"]'
+				) ].filter( element => ! element.hasAttribute( 'disabled' ) && ! element.getAttribute('aria-hidden') );
+			const focusElement = focusElements[ 0 ] || null;
 			const closeBtn = helpers.getCloseBtn( modal );
 	
-			if ( link ) {
-				link.focus();
+			if ( focusElement ) {
+				focusElement.focus();
 			} else {
 				closeBtn.focus();
 			}
@@ -41,6 +44,7 @@ const { actions, state, helpers } = store( 'wpcomsp/modal', {
 		closeModal() {
 			const { id } = getContext();
 			const modal = helpers.getModal( id );
+			const body = helpers.getBody();
 
 			state.selected = null;
 
@@ -52,15 +56,18 @@ const { actions, state, helpers } = store( 'wpcomsp/modal', {
 			} else {
 				actions.focusClose();
 			}
+
+			body.classList.remove( 'modal-open' );
 		},
 		openModal( event ) {
 			const { id } = getContext();
 			const modal = helpers.getModal( id );
+			const body = helpers.getBody();
 
 			state.selected = id;
 
 			// Don't return focus to the clicked button if it is inside a modal.
-			if ( event.target.closest(".wp-block-wpcomsp-modal-container") === null ) {
+			if ( event.target.closest(".wp-block-a8csp-modal-container") === null ) {
 				state.clickedButton = event.target.id;
 			}
 
@@ -72,6 +79,8 @@ const { actions, state, helpers } = store( 'wpcomsp/modal', {
 			} else {
 				actions.focusOpen();
 			}
+
+			body.classList.add( 'modal-open' );
 		},
 		handleModalKeydown( event ) {
 			// If Escape close the menu.
@@ -100,12 +109,12 @@ const { actions, state, helpers } = store( 'wpcomsp/modal', {
 				return;
 			}
 
-			if ( 'wp-block-wpcomsp-modal' === event.target.className ) {
+			if ( 'wp-block-a8csp-modal' === event.target.className ) {
 				return;
 			}
 			
 			const modal = helpers.getModal( id );
-			const modalInner = modal.querySelector( '.wp-block-wpcomsp-modal-container--inner' );
+			const modalInner = modal.querySelector( '.wp-block-a8csp-modal-container--inner' );
 
 			if ( ! modalInner.contains( event.target ) ) {
 				actions.closeModal();
@@ -130,6 +139,9 @@ const { actions, state, helpers } = store( 'wpcomsp/modal', {
 		},
 		hasTransition( element ) {
 			return parseFloat( getComputedStyle(element)['transitionDuration'] );
+		},
+		getBody() {
+			return document.body;
 		}
 	},
 } );

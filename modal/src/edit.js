@@ -7,7 +7,6 @@ import {
 	PlainText,
 	RichText,
 	useBlockProps,
-	URLInput,
 } from '@wordpress/block-editor';
 
 import { useDispatch } from '@wordpress/data';
@@ -16,10 +15,6 @@ import {
 	ComboboxControl,
 	PanelBody,
 	TextControl,
-	ToggleControl,
-	ButtonGroup,
-	Button,
-	PanelRow,
 } from '@wordpress/components';
 
 import {

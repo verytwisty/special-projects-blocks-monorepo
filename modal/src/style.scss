@@ -1,4 +1,8 @@
-.wp-block-wpcomsp-modal-container {
+body.modal-open {
+	overflow: hidden;
+}
+
+.wp-block-a8csp-modal-container {
 	align-items: center;
 	background-color: rgba(0, 0, 0, 0.8);
 	bottom: 0;
@@ -35,7 +39,9 @@
 		}
 	}
 
-	.wp-block-wpcomsp-modal-container--inner {
+	.wp-block-a8csp-modal-container--inner {
+		max-height: 100%;
+		overflow-y: scroll;
 		width: 100%;
 	}
 }
