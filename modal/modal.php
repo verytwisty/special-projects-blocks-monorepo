@@ -135,6 +135,13 @@ add_action( 'init', 'wpcomsp_modal_add_modal_meta' );
 /**
  * Add the modal templates to the site.
  *
+ * The action has to be added to the wp_head hook to ensure correct styles are loaded for the inner content
+ * of the modal, otherwise not all styles will be loaded.
+ *
+ * The resulting html is then echoed in the wp_footer hook to ensure the modal
+ * templates are added to the end of the page so that other html elements on the page
+ * do not interfere with the modal container.
+ *
  * @return void
  */
 function wpcomsp_modal_insert_modal_templates() {
@@ -164,13 +171,14 @@ function wpcomsp_modal_insert_modal_templates() {
 		<div
 			class="wp-block-wpcomsp-modal-container"
 			id="<?php echo esc_attr( $template['slug'] ); ?>"
-			data-wp-class--is-open="state.isModalOpen"
-			data-wp-interactive="wpcomsp/modal"
-			data-wp-on--keydown="actions.handleModalKeydown"
 			role="dialog"
 			aria-modal="true"
+			data-wp-interactive="wpcomsp/modal"
+			data-wp-class--is-open="state.isModalOpen"
+			data-wp-on--keydown="actions.handleModalKeydown"
 			data-wp-bind--aria-hidden="!state.isModalOpen"
-			data-wp-bind--aria-title="context.title"
+			data-wp-bind--inert="!state.isModalOpen"
+			data-wp-bind--aria-label="context.title"
 			data-wp-bind--aria-description="context.description"
 				<?php
 				echo wp_kses_data(
@@ -212,6 +220,11 @@ add_action( 'wp_head', 'wpcomsp_modal_insert_modal_templates', 0 );
  */
 function wpcomsp_modal_default_inner_content( $template ) {
 	?>
+	<div class="wp-block-wpcomsp-modal-container--inner">
+		
+		<?php echo do_blocks( $template['content'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+	</div>
+
 	<button
 		data-wp-on--click='actions.closeModal'
 		class="close-modal"
@@ -222,12 +235,37 @@ function wpcomsp_modal_default_inner_content( $template ) {
 		</svg>
 		<span class="screen-reader-text"><?php echo esc_html__( 'Close', 'modal' ); ?>
 	</button>
-	<div class="wp-block-wpcomsp-modal-container--inner">
-		
-		<?php echo do_blocks( $template['content'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-	</div>
 
 	<?php
 }
 
 add_action( 'wpcomsp_modal_inner_content', 'wpcomsp_modal_default_inner_content' );
+
+/**
+ * Add Modal button block to the list of allowed blocks for the Navigation block.
+ *
+ * @param array  $args       The block type registration arguments.
+ * @param string $block_type The block type name including namespace.
+ *
+ * @return array
+ */
+function wpcomsp_modal_navigation_filter( $args, $block_type ) {
+	// Filter to disable modal for navigation if needed.
+	$allow_modal_for_navigation = apply_filters( 'wpcomsp_modal_navigation', true );
+
+	if ( ! $allow_modal_for_navigation ) {
+		return $args;
+	}
+
+	if ( 'core/navigation' === $block_type ) {
+		if ( is_array( $args['allowed_blocks'] ) ) {
+			$updated_args = array_push( $args['allowed_blocks'], 'wpcomsp/modal' );
+
+			$args['allowedBlocks'] = $updated_args;
+		}
+	}
+
+	return $args;
+}
+
+add_filter( 'register_block_type_args', 'wpcomsp_modal_navigation_filter', 10, 2 );

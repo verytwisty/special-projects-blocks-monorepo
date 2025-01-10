@@ -42,7 +42,7 @@ import { useEffect, useState } from '@wordpress/element';
  */
 export default function Edit( props ) {
 	const { attributes, setAttributes } = props;
-	const { menuSlug, label } = attributes;
+	const { modalSlug, label } = attributes;
 	const blockProps = useBlockProps();
 
 	// Fetch all template parts.
@@ -72,28 +72,28 @@ export default function Edit( props ) {
 	const [ modalDescription, setModalDescription ] = useState( '' );
 
 	useEffect( () => {
-		if ( ! modalMeta || ! menuSlug ) {
+		if ( ! modalMeta || ! modalSlug ) {
 			return;
 		}
 
-		setModalTitle( modalMeta[ menuSlug ]?.modalTitle || '' );
-		setModalDescription( modalMeta[ menuSlug ]?.modalDescription || '' );
-	}, [ modalMeta, menuSlug, modalTitle, modalDescription ] );
+		setModalTitle( modalMeta[ modalSlug ]?.modalTitle || '' );
+		setModalDescription( modalMeta[ modalSlug ]?.modalDescription || '' );
+	}, [ modalMeta, modalSlug, modalTitle, modalDescription ] );
 
 	const setModalMetaValue = ( key, value ) => {
 		const newValue = modalMeta ? { ...modalMeta } : {};
 
-		if ( ! ( menuSlug in newValue ) ) {
-			newValue[ menuSlug ] = {
+		if ( ! ( modalSlug in newValue ) ) {
+			newValue[ modalSlug ] = {
 				modalTitle: undefined,
 				modalDescription: undefined,
 			};
 
-			newValue[ menuSlug ][ key ] = value;
+			newValue[ modalSlug ][ key ] = value;
 		} else {
-			const modalSetting = { ...modalMeta[ menuSlug ] };
+			const modalSetting = { ...modalMeta[ modalSlug ] };
 			modalSetting[ key ] = value;
-			newValue[ menuSlug ] = modalSetting;
+			newValue[ modalSlug ] = modalSetting;
 		}
 
 		const updatedMeta = {
@@ -114,10 +114,10 @@ export default function Edit( props ) {
 						menuOptions.length > 0 ? (
 							<ComboboxControl
 								label={ __( 'Modal Template', 'modal' ) }
-								value={ menuSlug }
+								value={ modalSlug }
 								options={ menuOptions }
 								onChange={ ( slugValue ) =>
-									setAttributes( { menuSlug: slugValue } )
+									setAttributes( { modalSlug: slugValue } )
 								}
 							/>
 						) : (
@@ -131,7 +131,7 @@ export default function Edit( props ) {
 					}
 
 					{
-						menuSlug && (
+						modalSlug && (
 
 							<>
 								<TextControl

@@ -9,7 +9,7 @@
 	"description": "A modal block that can be toggled open and closed",
 	"example": {},
 	"attributes": {
-		"menuSlug": {
+		"modalSlug": {
 			"type": "string",
 			"default": ""
 		},
