@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Override Post Links
- * Description:       Example block scaffolded with Create Block tool.
+ * Description:       Add a panel in the WP Admin allowing the user to enter a link which overrides the post links to the new link.
  * Version:           0.1.0
  * Requires at least: 6.7
  * Requires PHP:      7.4

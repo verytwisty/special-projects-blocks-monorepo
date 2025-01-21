@@ -6,14 +6,29 @@ Stable tag:        0.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Example block scaffolded with Create Block tool.
+Add a panel in the WP Admin allowing the user to enter a link which overrides the post links to the new link.
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+- Adds a side panel in the post section that allows the user to enter an external news link and the source - saved as post meta
+- Filters the post/title, post-featured-image, read-more & post-excerpt blocks so that the post link is replaced with the external news source link and makes it open in a new window if the link is set
+- Hooks into the template_redirect filter to make sure the post single is not accessible and is returned to the posts archive page by default.
+- Add a block variation & block bindings to display the news source
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+## Avaibable filters:
+
+### wpcomsp_override_post_links_post_types
+
+`apply_filters( 'wpcomsp_override_post_links_post_types', array $post_types );`
+
+Array of post types that are supported for the link override. Default 'post'
+
+### wpcomsp_override_post_links_redirect_url
+
+`apply_filters( 'wpcomsp_override_post_links_redirect_url', string $blog_archive, string $override_url );`
+
+Where the post single should be redirected to if accessed directly. Default 'Blog Archive'. Leave blank for no-redirect.
+
 
 == Installation ==
 
@@ -24,16 +39,6 @@ e.g.
 1. Upload the plugin files to the `/wp-content/plugins/override-post-links` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
-
-== Frequently Asked Questions ==
-
-= A question that someone might have =
-
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
 
 == Screenshots ==
 
